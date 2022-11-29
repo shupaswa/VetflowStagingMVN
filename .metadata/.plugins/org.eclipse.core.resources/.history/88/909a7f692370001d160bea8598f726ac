@@ -1,0 +1,121 @@
+package qa;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+//import org.openqa.selenium.chrome.ChromeDriver;
+//import org.testng.Assert;
+import org.testng.annotations.Test;
+import org.testng.asserts.SoftAssert;
+
+public class Login {
+	// creating a logger
+	private static Logger logger = LogManager.getLogger();
+	SoftAssert softAssert;
+	public Login() {
+		softAssert = new SoftAssert();
+	}
+	
+	public void loginValidIdPwd(String uname, String pword, WebDriver driver) {
+		try {
+			logger.info("starting program");
+			
+			 DriverHelper.open_Url(ConstantsHelper.urlLogin, driver);
+			 WindowOperationHelper.maximizeBrowser(driver);
+			 //driver.manage().window().maximize();
+					 
+			//Thread.sleep(4000);
+			 DriverHelper.implicitWait(driver, 5);
+			/*
+			 *  "userid"- list of web controls with id, name, etc can be taken from dev
+			 * team and made into constant, any change in selector values like id, name
+			 * needs to be documented, approved and communicated to the QA team
+			 */			
+							
+			  WebElement username = WebElementHelper.getElement(ConstantsHelper.xpath, "//input[@id='username']", driver); 
+			  username.sendKeys(uname);
+			  			  
+			  
+			  WebElement password = WebElementHelper.getElement(ConstantsHelper.xpath,"//input[@id='password']", driver); 
+			  password.sendKeys(pword);
+			 			 
+
+			  WebElement loginBtn = WebElementHelper.getElement(ConstantsHelper.xpath, "//button[contains(text(),'Sign In')]", driver);
+			  loginBtn.click();
+				
+				
+						
+			  String filePath = ScreenshotHelper.takeScreenshot(driver, "LoginHome","jpg"); 
+			  logger.info("SS stored at " + filePath);
+			  String currentUrl = driver.getCurrentUrl(); logger.info("currentUrl :"+ currentUrl);
+			  softAssert.assertEquals(currentUrl, ConstantsHelper.urlHome1);
+				
+			  
+		  //  DriverHelper.close_Driver(driver);
+			 
+			 
+		} catch (Exception ex) {
+
+			StackTraceElement stackTraceElements[] = ex.getStackTrace();
+			logger.error("Exception occured . Exception message " + ex.getMessage() + " /n Stack Trace ");
+			for (int i = 0, n = stackTraceElements.length; i < n; i++) {
+				logger.error(": Line no " + stackTraceElements[i].getLineNumber() + ">> Method Name : "
+						+ stackTraceElements[i].getMethodName() + "()");
+				
+			}
+		}
+	}
+	
+	
+	public void loginIdInvalidIdPwd(String uname, String pword, WebDriver driver){
+		try {
+			logger.info("starting program");
+			 DriverHelper.open_Url(ConstantsHelper.urlLogin, driver);
+			 WindowOperationHelper.maximizeBrowser(driver);
+			 DriverHelper.implicitWait(driver, 10);
+			
+			/*
+			 * "userid"- list of web controls with id, name, etc can be taken from dev team
+			 * and made into constant, any change in selector values like id, name needs to
+			 * be documented, approved and communicated to the QA team
+			 */
+			
+			
+			WebElement username = WebElementHelper.getElement(ConstantsHelper.xpath, "//input[@id='username']", driver);
+			username.sendKeys(uname);
+
+			WebElement password = WebElementHelper.getElement(ConstantsHelper.xpath, "//input[@id='password']", driver);
+			password.sendKeys(pword); //incorrect pwd, case insensitive
+
+			WebElement loginBtn = WebElementHelper.getElement(ConstantsHelper.xpath, "//button[contains(text(),'Sign In')]", driver);
+			loginBtn.click();
+			
+			
+			Thread.sleep(5000);
+			
+			 String currentUrl = driver.getCurrentUrl(); logger.info("currentUrl :"+ currentUrl);
+			  softAssert.assertEquals(currentUrl, ConstantsHelper.urlHome1);
+			
+			/*
+			 * String currentUrl = driver.getCurrentUrl(); logger.info("currentUrl :"+
+			 * currentUrl);
+			 * 
+			 * if(currentUrl.equals(ConstantsHelper.urlHome1)) //
+			 * ||currentUrl.equals(ConstantsHelper.urlHome2)) Assert.fail();
+			 *///logged in with incorrect pwd
+			 		   
+		    	
+			DriverHelper.close_Driver(driver);
+		} catch (Exception ex) {
+
+			StackTraceElement stackTraceElements[] = ex.getStackTrace();
+			logger.error("Exception occured . Exception message " + ex.getMessage() + " /n Stack Trace ");
+			for (int i = 0, n = stackTraceElements.length; i < n; i++) {
+				logger.error(": Line no " + stackTraceElements[i].getLineNumber() + ">> Method Name : "
+						+ stackTraceElements[i].getMethodName() + "()");
+				
+			}
+		}
+	}
+}

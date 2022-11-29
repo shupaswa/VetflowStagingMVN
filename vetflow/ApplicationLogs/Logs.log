@@ -1,0 +1,10 @@
+[INFO ] 2022-11-30 02:23:39.745 [main] DriverHelper - Attempting to open browser chrome
+[INFO ] 2022-11-30 02:23:44.051 [main] Login - starting program
+[INFO ] 2022-11-30 02:23:44.051 [main] DriverHelper - Getting url https://vetflowstaging.vetport.com/login
+[INFO ] 2022-11-30 02:23:46.214 [main] DriverHelper - Success in getting url https://vetflowstaging.vetport.com/login
+[INFO ] 2022-11-30 02:23:46.300 [main] WindowOperationHelper - Maximizing browser
+[INFO ] 2022-11-30 02:23:46.550 [main] WindowOperationHelper - Browser maximized 
+[INFO ] 2022-11-30 02:23:46.551 [main] DriverHelper - Attempting to implicity wait
+[INFO ] 2022-11-30 02:23:46.557 [main] DriverHelper - Implicity waited for 5
+[INFO ] 2022-11-30 02:24:16.550 [main] Login - SS stored at C:\Users\admin\Screenshots\30-11-2022\LoginHomefc340b8a-23b0-4ada-9db5-827f02ee7735.jpg
+[INFO ] 2022-11-30 02:24:16.560 [main] Login - currentUrl :https://vetflowstaging.vetport.com/dashboard

@@ -1,0 +1,22 @@
+package qa;
+
+import java.util.List;
+
+public class MasterLoginTest {
+
+	public void ValidCred() throws Exception {
+		//read valid creds from helper method -> excel sheet
+		
+		//store the valid creds in list<string>
+		
+		//loop through the list, split creds and call login
+		try {
+		List<String> validCredList= LoginHelper.readValidCreds();
+		
+		}
+		catch(Exception e){
+			throw e;
+		}
+		
+	}
+}

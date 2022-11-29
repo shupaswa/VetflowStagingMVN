@@ -1,0 +1,169 @@
+package qa;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.fail;
+
+
+import java.time.Duration;
+import java.util.List;
+
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.testng.annotations.Test;
+import org.testng.Assert;
+
+public class ClientRegistration {
+	private static Logger logger = LogManager.getLogger();
+	
+
+	// Note: webpage is not suitable for validating labels via Selenium, as all the
+	// label name should have common class name which should only be specific to
+	// labels only, which is contradictory.
+
+	
+	/*
+	 * public void validateClientFormLabels() throws Exception { try { // Login with
+	 * valid credential WebDriver driver = LoginHelper.GenericLoginMethod();
+	 * 
+	 * // Open client form WebElement form =
+	 * WebElementHelper.getElementWithWait(ConstantsHelper.xpath, driver, 15,
+	 * "//span[contains(text(),'+Client')]"); form.click();
+	 * 
+	 * // Implicit wait to load all the elements for the form.
+	 * driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(40));
+	 * 
+	 * List<WebElement> lists =
+	 * driver.findElements(By.className("Sel-formname-classname")); for (WebElement
+	 * list : lists) { System.out.println(list.getText()); //
+	 * Assert.assertTrue(false);
+	 * 
+	 * }
+	 * 
+	 * logger.info("end of program");
+	 * 
+	 * } catch (Exception ex) {
+	 * 
+	 * throw new Exception(ex); }
+	 * 
+	 * }
+	 */
+
+//Invalid data: Blank spaces
+	@Test(priority=1)
+	public void clientFormMandateField() throws Exception {
+		try {
+									
+			WebDriver driver= LoginHelper.GenericLoginMethod();
+			WebElement form= WebElementHelper.getElementWithWait(ConstantsHelper.xpath, driver, 15, "//span[contains(text(),'+Client')]");
+			form.click();
+			DriverHelper.implicitWait(driver, 40);
+			//driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(40));
+			
+			//To identify state element and clear the state drop-down
+			
+			WebElementHelper.getElement(ConstantsHelper.id, "state", driver).click();
+			DriverHelper.implicitWait(driver, 50);
+			//driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(50));
+			WebElement elem= driver.findElement(By.xpath("//*[@data-testid='CloseIcon']"));
+			DriverHelper.implicitWait(driver, 50);
+			//driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(50));
+			elem.click();
+			
+			//To identify city and zipcode element and clear them.
+					
+			WebElementHelper.getElement(ConstantsHelper.id, "city", driver).clear();
+			WebElementHelper.getElement(ConstantsHelper.id, "zipcode", driver).clear();
+
+			Thread.sleep(5000);
+			WebElementHelper.getElement(ConstantsHelper.xpath, "//button[contains(text(),'Save')]", driver).click();
+			
+		List<WebElement> validationLabels = driver.findElements(By.xpath("//span[@class='MuiFormLabel-asterisk Mui-error css-fywr8k']"));
+		logger.info(validationLabels.size());
+		
+		if(validationLabels.size() != 8)
+			Assert.fail();
+							
+		} catch (Exception ex) {
+			throw new Exception(ex);
+		}
+	}
+	
+	@Test(priority=2)
+	public void clientFormMandateFieldWithValidInput() throws Exception {
+		try {
+			String msg="Client added successfully.";
+			
+			WebDriver driver= LoginHelper.GenericLoginMethod();	
+		    Thread.sleep(5000);
+			 
+			
+			//To open the client Registration Form
+			
+			WebElement form= WebElementHelper.getElementWithWait(ConstantsHelper.xpath, driver, 15, "//span[contains(text(),'+Client')]");
+			form.click();
+			String currentUrl=driver.getCurrentUrl();
+			Thread.sleep(5000);
+			
+			//Clearing the Pre-filled data of the form
+			
+			WebElementHelper.getElement(ConstantsHelper.id, "state", driver).click();
+			DriverHelper.implicitWait(driver, 50);
+			//driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(50));
+			WebElement elem= driver.findElement(By.xpath("//*[@data-testid='CloseIcon']"));
+			DriverHelper.implicitWait(driver, 50);
+			//driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(50));
+			elem.click();
+			WebElementHelper.getElement(ConstantsHelper.id, "city", driver).clear();
+			WebElementHelper.getElement(ConstantsHelper.id, "zipcode", driver).clear();
+
+			Thread.sleep(5000);
+			
+			//To provide valid input in only mandatory field and save the form
+			
+			WebElementHelper.getElement(ConstantsHelper.id, "firstName", driver).sendKeys("Ruby");
+			WebElementHelper.getElement(ConstantsHelper.id, "lastName", driver).sendKeys("Page");
+			WebElementHelper.getElement(ConstantsHelper.id, "address1", driver).sendKeys("11th cross main road");
+			WebElementHelper.getElement(ConstantsHelper.id, "state", driver).click();
+			DriverHelper.implicitWait(driver, 40);
+			//driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(30));
+			Actions keyDown1 = new Actions(driver); 
+			keyDown1.sendKeys(Keys.chord(Keys.DOWN, Keys.DOWN, Keys.DOWN, Keys.DOWN, Keys.ENTER)).perform();
+
+			WebElementHelper.getElement(ConstantsHelper.id, "city", driver).sendKeys("Wooster");
+			WebElementHelper.getElement(ConstantsHelper.id, "zipcode", driver).sendKeys("654322");
+			WebElementHelper.getElement(ConstantsHelper.id, "email", driver).sendKeys("anjali.paswan7@harnstech.com");
+			WebElement selectMyElement = driver.findElement(By.id("phoneType"));
+            selectMyElement.click();
+
+			Thread.sleep(2000);
+
+			Actions keyDown2 = new Actions(driver); 
+			keyDown2.sendKeys(Keys.chord(Keys.DOWN, Keys.DOWN, Keys.DOWN, Keys.ENTER)).perform();
+			 
+			
+			WebElementHelper.getElement(ConstantsHelper.id, "pnumber", driver).sendKeys("1234567891");
+			WebElementHelper.getElement(ConstantsHelper.xpath,"//button[contains(text(), 'Add Phone')]", driver).click();
+			
+			WebElementHelper.getElement(ConstantsHelper.xpath, "//button[contains(text(),'Save')]", driver).click();
+			if((WebElementHelper.getElement(ConstantsHelper.xpath, "//div[@class='MuiAlert-message css-1xsto0d']", driver).getText()==msg) || !(currentUrl.equals(driver.getCurrentUrl())))
+				
+					System.out.println("Client Registered successfully and the url is changed to add patient " +driver.getCurrentUrl() );
+			else
+					System.out.println("Client Registeration fails- " +driver.getCurrentUrl()+ "and the error message is: " +WebElementHelper.getElement(ConstantsHelper.xpath, "//p[contains(text(), 'This email address already exists')]", driver));
+
+			
+			//System.out.println(WebElementHelper.getElement(ConstantsHelper.xpath, "//div[@class='MuiAlert-message css-1xsto0d']", driver).getText());
+			
+			//div[contains(text(),'Client added successfully.')]
+		} catch (Exception ex) {
+			logger.error("Exception occurred-" +ex.getMessage());
+			throw new Exception(ex);
+		}
+	}
+	
+	
+}

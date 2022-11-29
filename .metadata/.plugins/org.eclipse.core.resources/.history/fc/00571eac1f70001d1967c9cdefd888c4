@@ -1,0 +1,61 @@
+package qa;
+
+import java.util.List;
+
+import org.openqa.selenium.WebDriver;
+import org.testng.annotations.Test;
+@Test(priority=1)
+public class MasterLoginTest {
+
+	public void ValidCred() throws Exception {
+		//read valid creds from helper method -> excel sheet
+		
+		//store the valid creds in list<string>
+		
+		//loop through the list, split creds and call login
+		try {
+			 WebDriver driver = DriverHelper.open_Driver(ConstantsHelper.chromeBrowser);
+			 List<String> validCredList= LoginHelper.readValidCreds();
+			 for(String item:validCredList)
+		     {
+		    	 //Split 
+		    	String[] itemArray= item.split(",", 0);
+		    	//logger.info(itemArray[0].toString() +"-"+itemArray[1].toString());
+				
+		    	Login obj1 = new Login(); 
+				  obj1.loginValidIdPwd(itemArray[0].toString(), itemArray[1].toString(), driver);
+				 
+		     }
+			}
+			catch(Exception e){
+				throw e;
+			}
+			
+		}
+	@Test(priority=2)
+	public void InValidCred() throws Exception {
+		//read valid creds from helper method -> excel sheet
+		
+		//store the valid creds in list<string>
+		
+		//loop through the list, split creds and call login
+		try {
+			 WebDriver driver = DriverHelper.open_Driver(ConstantsHelper.chromeBrowser);
+			 List<String> invalidCredList= LoginHelper.readInvalidCreds();
+			 for(String item:invalidCredList)
+		     {
+		    	 //Split 
+		    	String[] itemArray= item.split(",", 0);
+		    	//logger.info(itemArray[0].toString() +"-"+itemArray[1].toString());
+				
+		    	Login obj1 = new Login(); 
+				  obj1.loginIdInvalidIdPwd(itemArray[0].toString(), itemArray[1].toString(), driver);
+				 
+		     }
+			}
+			catch(Exception e){
+				throw e;
+			}
+			
+		}
+}
